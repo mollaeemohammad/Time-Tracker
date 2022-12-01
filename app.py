@@ -4,6 +4,8 @@ from flask_restful import Api
 from utilities.errors import errors
 import logging
 from flask_cors import CORS
+from utilities.create_tables import create_tables
+from apis.login import LoginEmployee, LoginEmployer, Logout
 
 
 def init_routes(api: Api) -> None:
@@ -11,6 +13,8 @@ def init_routes(api: Api) -> None:
     Add API URL routes
     :param api: The Flask API object to which URLs are added
     """
+    api.add_resource(LoginEmployee, '/api/login_employee')
+    api.add_resource(LoginEmployer, '/api/login_employer')
     # api.add_resource(LoginAdmin, '/api/login_admin')
     # api.add_resource(LoginCustomer, '/api/login_customer')
     # api.add_resource(LoginStore, '/api/login_store')
@@ -46,6 +50,9 @@ def create_app() -> Flask:
     :return: The Flask object which will run and listen to incoming requests
     """
     app = Flask(__name__)
+    # SqlAlchemy Database Configuration With Mysql
+    # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:asd147''@localhost/time_tracker'
+    # app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     CORS(app)
     app.secret_key = 'asdsdfsdfs13sdf_df%&'
 
@@ -59,6 +66,8 @@ def create_app() -> Flask:
     # rbac.init_app(app)
 
     app.config['RBAC_USE_WHITE'] = True
+
+    create_tables()
 
     # Create a Flask API object
     api = Api(app, errors=errors)
