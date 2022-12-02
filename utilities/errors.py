@@ -41,6 +41,14 @@ class DatabaseConnectionError(HTTPException):
     pass
 
 
+class NotMatchPasswordWithConfirmError(HTTPException):
+    pass
+
+
+class AlreadyIsLoggedInError(HTTPException):
+    pass
+
+
 errors = {
     "InternalServerError": {
         "message": "Something went wrong",
@@ -80,6 +88,14 @@ errors = {
     },
     "InvalidArgumentsError": {
         "message": "Invalid type or format of arguments",
+        "status": 400
+    },
+    "NotMatchPasswordWithConfirmError": {
+        "message": "Entered password is not matched with confirm password",
+        "status": 400
+    },
+    "AlreadyIsLoggedInError": {
+        "message": "When you are logged in, you cannot do it again.",
         "status": 400
     }
 }
