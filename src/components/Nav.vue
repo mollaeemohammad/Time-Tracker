@@ -1,9 +1,3 @@
-<script>
-export default {
-    name: "nav-bar",
-};
-</script>
-
 <template>
     <nav>
         <router-link to="/" class="home">Home</router-link>

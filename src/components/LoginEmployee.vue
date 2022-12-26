@@ -1,3 +1,38 @@
+<script setup>
+import axios from "axios";
+import { useRouter } from "vue-router";
+import { ref } from "vue";
+
+const router = useRouter();
+
+const username = ref("");
+const password = ref("");
+const errorMessage = ref("");
+const showError = ref(false);
+
+async function getSubmitData() {
+    const response = await axios.post("api/login_employee", {
+        username: username.value,
+        password: password.value,
+    });
+
+    console.log(response);
+    if (response.data.message === "Successful") {
+        router.push("/");
+    } else if (
+        response.data.message === "Unsuccessful" ||
+        response.data?.status === 401
+    ) {
+        errorMessage.value = "Username or password is wrong";
+        showError.value = true;
+
+        setTimeout(() => {
+            showError.value = false;
+        }, 3000);
+    }
+}
+</script>
+
 <template>
     <div class="container">
         <h3>Employee Login</h3>
@@ -35,44 +70,6 @@
         </p>
     </div>
 </template>
-
-<script>
-import axios from "axios";
-export default {
-    name: "login-employee",
-    data() {
-        return {
-            username: "",
-            password: "",
-            errorMessage: "",
-            showError: false,
-        };
-    },
-    methods: {
-        async getSubmitData() {
-            const response = await axios.post("api/login_employee", {
-                username: this.username,
-                password: this.password,
-            });
-
-            console.log(response);
-            if (response.data.message === "Successful") {
-                this.$router.push("/");
-            } else if (
-                response.data.message === "Unsuccessful" ||
-                response.data?.status === 401
-            ) {
-                this.errorMessage = "Username or password is wrong";
-                this.showError = true;
-
-                setTimeout(() => {
-                    this.showError = false;
-                }, 3000);
-            }
-        },
-    },
-};
-</script>
 
 <style scoped>
 .container {

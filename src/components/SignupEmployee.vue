@@ -1,3 +1,42 @@
+<script setup>
+import axios from "axios";
+import { useRouter } from "vue-router";
+import { ref } from "vue";
+
+const router = useRouter();
+
+const firstName = ref("");
+const lastName = ref("");
+const username = ref("");
+const password = ref("");
+const passwordConfirm = ref("");
+const showError = ref(false);
+const errorMessage = ref("");
+
+async function getSubmitData() {
+    const response = await axios.post("api/signup_employee", {
+        first_name: firstName.value,
+        last_name: lastName.value,
+        username: username.value,
+        password: password.value,
+        confirm_password: passwordConfirm.value,
+    });
+    console.log(response);
+
+    if (response.data.message === "Successful") {
+        router.push("/employee/login");
+    }
+
+    if (response.data.status >= 400) {
+        showError.value = true;
+        errorMessage.value = response.data.message;
+        setTimeout(() => {
+            showError.value = false;
+        }, 3000);
+    }
+}
+</script>
+
 <template>
     <div class="container">
         <h3>Signup</h3>
@@ -65,49 +104,6 @@
         </p>
     </div>
 </template>
-
-<script>
-import axios from "axios";
-
-export default {
-    name: "signup-empolyee",
-    data() {
-        return {
-            firstName: "",
-            lastName: "",
-            username: "",
-            password: "",
-            passwordConfirm: "",
-            showError: false,
-            errorMessage: "",
-        };
-    },
-    methods: {
-        async getSubmitData() {
-            const response = await axios.post("api/signup_employee", {
-                first_name: this.firstName,
-                last_name: this.lastName,
-                username: this.username,
-                password: this.password,
-                confirm_password: this.passwordConfirm,
-            });
-            console.log(response);
-
-            if (response.data.message === "Successful") {
-                this.$router.push("/employee/login");
-            }
-
-            if (response.data.status >= 400) {
-                this.showError = true;
-                this.errorMessage = response.data.message;
-                setTimeout(() => {
-                    this.showError = false;
-                }, 3000);
-            }
-        },
-    },
-};
-</script>
 
 <style scoped>
 .container {

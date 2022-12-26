@@ -4,7 +4,7 @@
     </div>
 </template>
 
-<script>
+<!-- <script>
 // import axios from "axios";
 
 export default {
@@ -17,7 +17,7 @@ export default {
     //     console.log(response);
     // },
 };
-</script>
+</script> -->
 
 <style scoped>
 div {
