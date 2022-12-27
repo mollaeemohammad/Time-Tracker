@@ -3,6 +3,7 @@ from flask_restful import Resource, reqparse
 from utilities.login import login_employee, login_employer
 from utilities.errors import *
 from utilities.new_user import add_new_employee, add_new_employer
+from flask_jwt_extended import create_access_token
 
 
 def is_found_user(mysql_response: list) -> bool:
@@ -126,13 +127,12 @@ class LoginEmployee(Resource):
             if is_found_user(login_employee_info):
                 session['logged_in'] = True
                 session['role'] = 'employee'
-                session['username'] = login_employee_info[0][1]
+                session['username'] = login_employee_info[0][4]
                 session['id'] = login_employee_info[0][0]
+                # passing the username as an identifier
+                access_token = create_access_token(identity=login_employee_info[0][4])
 
-                return jsonify({
-                    "message": "Successful",
-                    "info": login_employee_info
-                })
+                return jsonify(access_token=access_token)
 
         except UnauthorizedError:
             return jsonify(errors['UnauthorizedError'])
@@ -157,12 +157,10 @@ class LoginEmployer(Resource):
             if is_found_user(login_employer_info):
                 session['logged_in'] = True
                 session['role'] = 'customer'
-                session['username'] = login_employer_info[0][3]
+                session['username'] = login_employer_info[0][4]
                 session['id'] = login_employer_info[0][0]
-                return jsonify({
-                    "message": "Successful",
-                    "info": login_employer_info
-                })
+                access_token = create_access_token(identity=login_employer_info[0][4])
+                return jsonify(access_token=access_token)
             else:
                 raise UnauthorizedError
         except UnauthorizedError:
@@ -177,6 +175,8 @@ class Logout(Resource):
             role = session['role']
             username = session['username']
             id = session['id']
+
+            print([role, username, id])
             session.clear()
 
             return jsonify({

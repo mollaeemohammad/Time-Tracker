@@ -4,6 +4,7 @@ from flask_restful import Api
 from utilities.errors import errors
 import logging
 from flask_cors import CORS
+from flask_jwt_extended import JWTManager
 from utilities.create_tables import create_tables
 from apis.login import LoginEmployee, LoginEmployer, Logout, SignUpEmployee, SignUpEmployer
 
@@ -59,8 +60,12 @@ def create_app() -> Flask:
     CORS(app)
     app.secret_key = 'asdsdfsdfs13sdf_df%&'
 
+    # setting up the jwt extension
+    app.config["JWT_SECRET_KEY"] = "super-secret"  # Change this!
+    jwt = JWTManager(app)
+
     logger = logging.getLogger(__name__)
-    logger.setLevel(logging.INFO)
+    logger.setLevel(logging.DEBUG)
     log_handler = logging.FileHandler(filename='./logs/requests.log', mode='a+')
     formatter = logging.Formatter('[%(asctime)s] %(levelname)-8s %(filename)s %(funcName)s %(message)s')
     log_handler.setFormatter(formatter)
