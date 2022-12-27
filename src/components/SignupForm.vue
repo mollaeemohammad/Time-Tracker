@@ -1,81 +1,87 @@
 <script setup>
-import SignupForm from "./signupForm.vue";
-import { useSignup } from "../composables/signup";
+import { ref } from "vue";
 
-const {
-    firstName,
-    lastName,
-    username,
-    password,
-    passwordConfirm,
-    showError,
-    updateInfo,
-    errorMessage,
-    getSubmitData,
-} = useSignup("employee");
+const props = defineProps([
+    "userRole",
+    "errorMessage",
+    "showError",
+    "updateInfo",
+    "getSubmitData",
+]);
+const localFirstName = ref("");
+const localLastName = ref("");
+const localUsername = ref("");
+const localPassword = ref("");
+const localPasswordConfirm = ref("");
+
+const userRoleCapital =
+    props.userRole.charAt(0).toUpperCase() + props.userRole.slice(1);
 </script>
 
 <template>
-    <SignupForm
-        user-role="employee"
-        :error-message="errorMessage"
-        :show-error="showError"
-        :update-info="updateInfo"
-        :get-submit-data="getSubmitData"
-    />
-
-    <!-- <div class="container">
-        <h3>Signup</h3>
-        <form @submit.prevent="getSubmitData">
+    <div class="container">
+        <h3>{{ userRoleCapital }} Signup</h3>
+        <form
+            @submit.prevent="
+                updateInfo([
+                    localFirstName,
+                    localLastName,
+                    localUsername,
+                    localPassword,
+                    localPasswordConfirm,
+                ]);
+                getSubmitData();
+            "
+        >
             <div class="inputs">
                 <p class="error" v-show="showError">{{ errorMessage }}</p>
                 <div class="input-container">
                     <input
                         type="text"
-                        name="employee-fname"
-                        id="employee-fname"
+                        :name="`${userRole}-fname`"
+                        :id="`${userRole}-fname`"
                         placeholder="First Name"
-                        v-model="firstName"
+                        v-model="localFirstName"
                         required
                     />
                 </div>
                 <div class="input-container">
                     <input
                         type="text"
-                        name="employee-lname"
-                        id="employee-lname"
+                        :name="`${userRole}-lname`"
+                        :id="`${userRole}-lname`"
                         placeholder="Last Name"
-                        v-model="lastName"
+                        v-model="localLastName"
                         required
                     />
                 </div>
                 <div class="input-container">
                     <input
                         type="text"
-                        name="employee-uname"
-                        id="employee-uname"
+                        :name="`${userRole}-uname`"
+                        :id="`${userRole}-uname`"
                         placeholder="Username"
-                        v-model="username"
+                        v-model="localUsername"
                         required
                     />
                 </div>
                 <div class="input-container">
                     <input
                         type="password"
-                        name="employee-password"
-                        id="employee-password"
+                        :name="`${userRole}-password`"
+                        :id="`${userRole}-password`"
                         placeholder="Password"
-                        v-model="password"
+                        v-model="localPassword"
                         required
                     />
                 </div>
                 <div class="input-container">
                     <input
                         type="password"
-                        name="employee-password-confirm"
-                        id="employee-password-confirm"
+                        :name="`${userRole}-password-confirm`"
+                        :id="`${userRole}-password-confirm`"
                         placeholder="Confirm Password"
-                        v-model="passwordConfirm"
+                        v-model="localPasswordConfirm"
                         required
                     />
                 </div>
@@ -83,12 +89,12 @@ const {
             <button>Signup</button>
         </form>
         <p class="form-text">
-            Already an employee? go to
-            <router-link to="/employee/login" class="form-link"
+            Already an {{ userRole }}? go to
+            <router-link :to="`/${userRole}/login`" class="form-link"
                 >login page</router-link
             >
         </p>
-    </div> -->
+    </div>
 </template>
 
 <style scoped>

@@ -1,44 +1,29 @@
 <script setup>
-import axios from "axios";
-import { useRouter } from "vue-router";
-import { ref } from "vue";
+import SignupForm from "./signupForm.vue";
+import { useSignup } from "../composables/signup";
 
-const router = useRouter();
-
-const firstName = ref("");
-const lastName = ref("");
-const username = ref("");
-const password = ref("");
-const passwordConfirm = ref("");
-const showError = ref(false);
-const errorMessage = ref("");
-
-async function getSubmitData() {
-    const response = await axios.post("api/signup_employer", {
-        first_name: firstName.value,
-        last_name: lastName.value,
-        username: username.value,
-        password: password.value,
-        confirm_password: passwordConfirm.value,
-    });
-    console.log(response);
-
-    if (response.data.message === "Successful") {
-        router.push("/employer/login");
-    }
-
-    if (response.data.status >= 400) {
-        showError.value = true;
-        errorMessage.value = response.data.message;
-        setTimeout(() => {
-            showError.value = false;
-        }, 3000);
-    }
-}
+const {
+    firstName,
+    lastName,
+    username,
+    password,
+    passwordConfirm,
+    showError,
+    errorMessage,
+    updateInfo,
+    getSubmitData,
+} = useSignup("employer");
 </script>
 
 <template>
-    <div class="container">
+    <SignupForm
+        user-role="employer"
+        :error-message="errorMessage"
+        :show-error="showError"
+        :update-info="updateInfo"
+        :get-submit-data="getSubmitData"
+    />
+    <!-- <div class="container">
         <h3>Signup</h3>
         <form @submit.prevent="getSubmitData">
             <p class="error" v-show="showError">{{ errorMessage }}</p>
@@ -103,7 +88,7 @@ async function getSubmitData() {
                 >login page</router-link
             >
         </p>
-    </div>
+    </div> -->
 </template>
 
 <style scoped>

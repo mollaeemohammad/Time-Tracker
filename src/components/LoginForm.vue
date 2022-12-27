@@ -1,49 +1,48 @@
 <script setup>
-import LoginForm from "./loginForm.vue";
-import { useLogin } from "../composables/login";
+import { ref } from "vue";
 
-const {
-    username,
-    password,
-    errorMessage,
-    showError,
-    updateInfo,
-    getSubmitData,
-} = useLogin("employer");
+const props = defineProps([
+    "userRole",
+    "errorMessage",
+    "showError",
+    "updateInfo",
+    "getSubmitData",
+]);
+
+const localUsername = ref("");
+const localPassword = ref("");
+const userRoleCapital =
+    props.userRole.charAt(0).toUpperCase() + props.userRole.slice(1);
 </script>
 
 <template>
-    <LoginForm
-        user-role="employer"
-        :error-message="errorMessage"
-        :show-error="showError"
-        :update-info="updateInfo"
-        :get-submit-data="getSubmitData"
-    />
-
-    <!-- <div class="container">
-        <h3>Employer Login</h3>
-        <form @submit.prevent="getSubmitData">
+    <div class="container">
+        <h3>{{ userRoleCapital }} Login</h3>
+        <form
+            @submit.prevent="
+                updateInfo([localUsername, localPassword]);
+                getSubmitData();
+            "
+        >
             <div class="inputs">
                 <p class="error" v-show="showError">{{ errorMessage }}</p>
-
                 <div class="input-container">
                     <input
                         type="text"
-                        name="employer-username"
-                        id="employer-username"
-                        placeholder="Employer Username"
-                        v-model="username"
+                        :name="userRole + '-uname'"
+                        :id="userRole + '-uname'"
+                        placeholder="Username"
+                        v-model="localUsername"
                         required
                     />
                 </div>
                 <div class="input-container">
                     <input
                         type="password"
-                        name="employer-password"
-                        id="employer-password"
+                        name="password"
+                        id="password"
                         placeholder="Password"
-                        v-model="password"
+                        v-model="localPassword"
                         required
                     />
                 </div>
@@ -51,15 +50,14 @@ const {
             <button>Login</button>
         </form>
         <p class="form-text">
-            New employer? go to
-            <router-link to="/employer/signup" class="form-link"
+            New {{ userRole }}? go to
+            <router-link :to="`/${userRole}/signup`" class="form-link"
                 >signup page</router-link
             >
         </p>
     </div>
- -->
 </template>
-<!--
+
 <style scoped>
 .container {
     background-color: #eee;
@@ -121,4 +119,4 @@ button:hover {
     color: rgb(20, 144, 185);
     text-decoration: none;
 }
-</style> -->
+</style>

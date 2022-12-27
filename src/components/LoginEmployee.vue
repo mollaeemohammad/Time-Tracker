@@ -1,40 +1,63 @@
 <script setup>
-import axios from "axios";
-import { useRouter } from "vue-router";
-import { ref } from "vue";
+import LoginForm from "./loginForm.vue";
+import { useLogin } from "../composables/login";
+const {
+    username,
+    password,
+    errorMessage,
+    showError,
+    updateInfo,
+    getSubmitData,
+} = useLogin("employee");
+// import LoginForm from "./loginForm.vue";
+// import axios from "axios";
+// import { useRouter } from "vue-router";
+// import { ref } from "vue";
 
-const router = useRouter();
+// const router = useRouter();
 
-const username = ref("");
-const password = ref("");
-const errorMessage = ref("");
-const showError = ref(false);
+// const username = ref("");
+// const password = ref("");
+// const errorMessage = ref("");
+// const showError = ref(false);
 
-async function getSubmitData() {
-    const response = await axios.post("api/login_employee", {
-        username: username.value,
-        password: password.value,
-    });
+// function updateInfo(usernameVal, passwordVal) {
+//     username.value = usernameVal;
+//     password.value = passwordVal;
+// }
 
-    console.log(response);
-    if (response.data.message === "Successful") {
-        router.push("/");
-    } else if (
-        response.data.message === "Unsuccessful" ||
-        response.data?.status === 401
-    ) {
-        errorMessage.value = "Username or password is wrong";
-        showError.value = true;
+// async function getSubmitData() {
+//     const response = await axios.post("api/login_employee", {
+//         username: username.value,
+//         password: password.value,
+//     });
 
-        setTimeout(() => {
-            showError.value = false;
-        }, 3000);
-    }
-}
+//     console.log(response);
+//     if (response.data.message === "Successful") {
+//         router.push("/");
+//     } else if (
+//         response.data.message === "Unsuccessful" ||
+//         response.data?.status === 401
+//     ) {
+//         errorMessage.value = "Username or password is wrong";
+//         showError.value = true;
+
+//         setTimeout(() => {
+//             showError.value = false;
+//         }, 3000);
+//     }
+// }
 </script>
 
 <template>
-    <div class="container">
+    <LoginForm
+        user-role="employee"
+        :error-message="errorMessage"
+        :show-error="showError"
+        :update-info="updateInfo"
+        :get-submit-data="getSubmitData"
+    />
+    <!-- <div class="container">
         <h3>Employee Login</h3>
         <form @submit.prevent="getSubmitData">
             <div class="inputs">
@@ -68,10 +91,10 @@ async function getSubmitData() {
                 >signup page</router-link
             >
         </p>
-    </div>
+    </div> -->
 </template>
 
-<style scoped>
+<!-- <style scoped>
 .container {
     background-color: #eee;
     color: #333;
@@ -132,4 +155,4 @@ button:hover {
     color: rgb(20, 144, 185);
     text-decoration: none;
 }
-</style>
+</style> -->
