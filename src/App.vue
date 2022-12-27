@@ -4,7 +4,7 @@ import Nav from "./components/Nav.vue";
 
 <template>
     <div id="app">
-        <Nav></Nav>
+        <Nav />
         <main>
             <section class="container">
                 <!-- <AlertVue class="alert"></AlertVue> -->

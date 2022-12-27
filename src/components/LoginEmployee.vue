@@ -50,13 +50,15 @@ const {
 </script>
 
 <template>
-    <LoginForm
-        user-role="employee"
-        :error-message="errorMessage"
-        :show-error="showError"
-        :update-info="updateInfo"
-        :get-submit-data="getSubmitData"
-    />
+    <div>
+        <LoginForm
+            user-role="employee"
+            :error-message="errorMessage"
+            :show-error="showError"
+            :update-info="updateInfo"
+            :get-submit-data="getSubmitData"
+        />
+    </div>
     <!-- <div class="container">
         <h3>Employee Login</h3>
         <form @submit.prevent="getSubmitData">

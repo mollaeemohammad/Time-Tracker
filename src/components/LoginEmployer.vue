@@ -13,14 +13,15 @@ const {
 </script>
 
 <template>
-    <LoginForm
-        user-role="employer"
-        :error-message="errorMessage"
-        :show-error="showError"
-        :update-info="updateInfo"
-        :get-submit-data="getSubmitData"
-    />
-
+    <div>
+        <LoginForm
+            user-role="employer"
+            :error-message="errorMessage"
+            :show-error="showError"
+            :update-info="updateInfo"
+            :get-submit-data="getSubmitData"
+        />
+    </div>
     <!-- <div class="container">
         <h3>Employer Login</h3>
         <form @submit.prevent="getSubmitData">

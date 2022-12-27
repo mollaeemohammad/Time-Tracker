@@ -16,13 +16,15 @@ const {
 </script>
 
 <template>
-    <SignupForm
-        user-role="employer"
-        :error-message="errorMessage"
-        :show-error="showError"
-        :update-info="updateInfo"
-        :get-submit-data="getSubmitData"
-    />
+    <div>
+        <SignupForm
+            user-role="employer"
+            :error-message="errorMessage"
+            :show-error="showError"
+            :update-info="updateInfo"
+            :get-submit-data="getSubmitData"
+        />
+    </div>
     <!-- <div class="container">
         <h3>Signup</h3>
         <form @submit.prevent="getSubmitData">

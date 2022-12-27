@@ -16,45 +16,47 @@ const userRoleCapital =
 </script>
 
 <template>
-    <div class="container">
-        <h3>{{ userRoleCapital }} Login</h3>
-        <form
-            @submit.prevent="
-                updateInfo([localUsername, localPassword]);
-                getSubmitData();
-            "
-        >
-            <div class="inputs">
-                <p class="error" v-show="showError">{{ errorMessage }}</p>
-                <div class="input-container">
-                    <input
-                        type="text"
-                        :name="userRole + '-uname'"
-                        :id="userRole + '-uname'"
-                        placeholder="Username"
-                        v-model="localUsername"
-                        required
-                    />
-                </div>
-                <div class="input-container">
-                    <input
-                        type="password"
-                        name="password"
-                        id="password"
-                        placeholder="Password"
-                        v-model="localPassword"
-                        required
-                    />
-                </div>
-            </div>
-            <button>Login</button>
-        </form>
-        <p class="form-text">
-            New {{ userRole }}? go to
-            <router-link :to="`/${userRole}/signup`" class="form-link"
-                >signup page</router-link
+    <div>
+        <div class="container">
+            <h3>{{ userRoleCapital }} Logins</h3>
+            <form
+                @submit.prevent="
+                    updateInfo([localUsername, localPassword]);
+                    getSubmitData();
+                "
             >
-        </p>
+                <div class="inputs">
+                    <p class="error" v-show="showError">{{ errorMessage }}</p>
+                    <div class="input-container">
+                        <input
+                            type="text"
+                            :name="userRole + '-uname'"
+                            :id="userRole + '-uname'"
+                            placeholder="Username"
+                            v-model="localUsername"
+                            required
+                        />
+                    </div>
+                    <div class="input-container">
+                        <input
+                            type="password"
+                            name="password"
+                            id="password"
+                            placeholder="Password"
+                            v-model="localPassword"
+                            required
+                        />
+                    </div>
+                </div>
+                <button class="rounded-pill">Login</button>
+            </form>
+            <p class="form-text">
+                New {{ userRole }}? go to
+                <router-link :to="`/${userRole}/signup`" class="form-link"
+                    >signup page</router-link
+                >
+            </p>
+        </div>
     </div>
 </template>
 
@@ -96,7 +98,7 @@ input {
 
 button {
     border: none;
-    border-radius: 100rem;
+    /* border-radius: 100rem; */
     color: #eee;
     width: 100%;
     padding: 1rem 2rem;

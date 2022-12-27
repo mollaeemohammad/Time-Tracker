@@ -16,6 +16,10 @@ const localPasswordConfirm = ref("");
 
 const userRoleCapital =
     props.userRole.charAt(0).toUpperCase() + props.userRole.slice(1);
+
+function prda() {
+    console.log(userRoleCapital);
+}
 </script>
 
 <template>
@@ -31,6 +35,7 @@ const userRoleCapital =
                     localPasswordConfirm,
                 ]);
                 getSubmitData();
+                prda();
             "
         >
             <div class="inputs">
@@ -86,7 +91,7 @@ const userRoleCapital =
                     />
                 </div>
             </div>
-            <button>Signup</button>
+            <button class="rounded-pill">Signup</button>
         </form>
         <p class="form-text">
             Already an {{ userRole }}? go to
@@ -135,7 +140,7 @@ input {
 
 button {
     border: none;
-    border-radius: 100rem;
+    /* border-radius: 100rem; */
     color: #eee;
     width: 100%;
     padding: 1rem 2rem;
