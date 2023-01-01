@@ -44,7 +44,7 @@ class SignUpEmployee(Resource):
             )
 
             if add_employee == -1:
-                raise DatabaseConnectionError
+                raise AlreadyExistsError
 
             return jsonify({
                 "message": "Successful",
@@ -96,7 +96,7 @@ class SignUpEmployer(Resource):
             )
 
             if add_employee == -1:
-                raise DatabaseConnectionError
+                raise AlreadyExistsError
 
             return jsonify({
                 "message": "Successful",

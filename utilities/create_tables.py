@@ -31,9 +31,11 @@ def create_tables():
         cursor.execute(f'CREATE TABLE IF NOT EXISTS projects \
                             ( \
                                 id            INT PRIMARY KEY AUTO_INCREMENT, \
+                                name          VARCHAR(200) UNIQUE , \
                                 description   TEXT, \
                                 created_at    TIMESTAMP DEFAULT (CURRENT_TIMESTAMP), \
-                                finished_date TIMESTAMP \
+                                finished_date TIMESTAMP, \
+                                status        VARCHAR(200) \
                             );')
         conn.commit()
 
@@ -97,6 +99,7 @@ def create_tables():
                                     ON UPDATE CASCADE \
                             );')
         conn.commit()
+        return 1
 
     except Error as error:
         conn.rollback()
