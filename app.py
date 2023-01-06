@@ -8,6 +8,7 @@ from flask_jwt_extended import JWTManager
 from utilities.create_tables import create_tables
 from apis.login import LoginEmployee, LoginEmployer, Logout, SignUpEmployee, SignUpEmployer
 from apis.add_new_project import AddNewProject
+from apis.update_description import UpdateDescriptionOfProject
 
 
 def init_routes(api: Api) -> None:
@@ -21,6 +22,7 @@ def init_routes(api: Api) -> None:
     api.add_resource(SignUpEmployer, '/api/signup_employer')
     api.add_resource(Logout, '/api/logout')
     api.add_resource(AddNewProject, '/api/add_new_project')
+    api.add_resource(UpdateDescriptionOfProject, '/api/update_description_of_project')
     # api.add_resource(LoginAdmin, '/api/login_admin')
     # api.add_resource(LoginCustomer, '/api/login_customer')
     # api.add_resource(LoginStore, '/api/login_store')

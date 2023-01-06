@@ -53,6 +53,10 @@ class UnableToAddToDataBase(HTTPException):
     pass
 
 
+class NotAllowedToDoThis(HTTPException):
+    pass
+
+
 errors = {
     "InternalServerError": {
         "message": "Something went wrong",
@@ -104,6 +108,10 @@ errors = {
     },
     "UnableToAddToDataBase": {
         "message": "Unable to add sent information to data base.",
+        "status": 400
+    },
+    "NotAllowedToDoThis": {
+        "message": "Not allowed to do this work.",
         "status": 400
     }
 }
