@@ -2,7 +2,7 @@ import axios from "axios";
 import { useRouter } from "vue-router";
 import { ref } from "vue";
 
-export function useSignup(userRole) {
+export function useSignup(userRoleRef) {
     const router = useRouter();
 
     const firstName = ref("");
@@ -30,7 +30,7 @@ export function useSignup(userRole) {
     }
 
     async function getSubmitData() {
-        const response = await axios.post(`api/signup_${userRole}`, {
+        const response = await axios.post(`api/signup_${userRoleRef.value}`, {
             first_name: firstName.value,
             last_name: lastName.value,
             username: username.value,
@@ -40,7 +40,7 @@ export function useSignup(userRole) {
         console.log(response);
 
         if (response.data.message === "Successful") {
-            router.push(`/${userRole}/login`);
+            router.push(`/${userRoleRef.value}/login`);
         }
 
         if (response.data.status >= 400) {
@@ -48,6 +48,7 @@ export function useSignup(userRole) {
             errorMessage.value = response.data.message;
             setTimeout(() => {
                 showError.value = false;
+                errorMessage.value = "";
             }, 3000);
         }
     }

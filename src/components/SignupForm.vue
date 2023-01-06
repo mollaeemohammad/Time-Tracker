@@ -1,166 +1,175 @@
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
+import { useSignup } from "../composables/signup";
 
-const props = defineProps([
-    "userRole",
-    "errorMessage",
-    "showError",
-    "updateInfo",
-    "getSubmitData",
+const step = ref(1);
+const roleRadios = ref(null);
+
+const form = ref(null);
+const {
+    firstName,
+    lastName,
+    username,
+    password,
+    passwordConfirm,
+    showError,
+    errorMessage,
+    updateInfo,
+    getSubmitData,
+} = useSignup(roleRadios);
+
+const emailRules = ref([
+    (v) => !!v || "E-mail is required",
+    (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
 ]);
-const localFirstName = ref("");
-const localLastName = ref("");
-const localUsername = ref("");
-const localPassword = ref("");
-const localPasswordConfirm = ref("");
+const requiredRule = ref((v) => !!v || "This field is required");
+const blankRule = ref((v) => (v && !!v.trim()) || "Value cannot be blank");
+const namingRules = ref([requiredRule.value, blankRule.value]);
 
-const userRoleCapital =
-    props.userRole.charAt(0).toUpperCase() + props.userRole.slice(1);
+const currentTitle = computed(() => {
+    return `I want to signup as ${
+        roleRadios.value ? `an ${roleRadios.value}` : "..."
+    }`;
+});
 
-function prda() {
-    console.log(userRoleCapital);
+async function validate() {
+    const { valid } = await form.value.validate();
+
+    if (!valid) return;
+
+    updateInfo([
+        firstName.value,
+        lastName.value,
+        username.value,
+        password.value,
+        passwordConfirm.value,
+    ]);
+    getSubmitData();
 }
 </script>
 
 <template>
-    <div class="container">
-        <h3>{{ userRoleCapital }} Signup</h3>
-        <form
-            @submit.prevent="
-                updateInfo([
-                    localFirstName,
-                    localLastName,
-                    localUsername,
-                    localPassword,
-                    localPasswordConfirm,
-                ]);
-                getSubmitData();
-                prda();
-            "
-        >
-            <div class="inputs">
-                <p class="error" v-show="showError">{{ errorMessage }}</p>
-                <div class="input-container">
-                    <input
-                        type="text"
-                        :name="`${userRole}-fname`"
-                        :id="`${userRole}-fname`"
-                        placeholder="First Name"
-                        v-model="localFirstName"
-                        required
-                    />
-                </div>
-                <div class="input-container">
-                    <input
-                        type="text"
-                        :name="`${userRole}-lname`"
-                        :id="`${userRole}-lname`"
-                        placeholder="Last Name"
-                        v-model="localLastName"
-                        required
-                    />
-                </div>
-                <div class="input-container">
-                    <input
-                        type="text"
-                        :name="`${userRole}-uname`"
-                        :id="`${userRole}-uname`"
-                        placeholder="Username"
-                        v-model="localUsername"
-                        required
-                    />
-                </div>
-                <div class="input-container">
-                    <input
-                        type="password"
-                        :name="`${userRole}-password`"
-                        :id="`${userRole}-password`"
-                        placeholder="Password"
-                        v-model="localPassword"
-                        required
-                    />
-                </div>
-                <div class="input-container">
-                    <input
-                        type="password"
-                        :name="`${userRole}-password-confirm`"
-                        :id="`${userRole}-password-confirm`"
-                        placeholder="Confirm Password"
-                        v-model="localPasswordConfirm"
-                        required
-                    />
-                </div>
-            </div>
-            <button class="rounded-pill">Signup</button>
-        </form>
-        <p class="form-text">
-            Already an {{ userRole }}? go to
-            <router-link :to="`/${userRole}/login`" class="form-link"
-                >login page</router-link
-            >
-        </p>
-    </div>
+    <v-container fluid class="fill-height">
+        <v-row justify="center" align="center" style="height: 100vh">
+            <v-col>
+                <v-card class="mx-auto" max-width="500">
+                    <v-card-title
+                        class="text-h6 font-weight-regular justify-space-between"
+                    >
+                        <span>{{ currentTitle }}</span>
+                    </v-card-title>
+
+                    <v-window v-model="step">
+                        <v-window-item :value="1">
+                            <v-radio-group v-model="roleRadios" mandatory>
+                                <v-radio
+                                    label="Employee"
+                                    value="employee"
+                                ></v-radio>
+                                <v-radio
+                                    label="Employer"
+                                    value="employer"
+                                ></v-radio>
+                            </v-radio-group>
+                        </v-window-item>
+
+                        <v-window-item :value="2">
+                            <v-card-text>
+                                <v-alert
+                                    v-if="showError"
+                                    density="comfortable"
+                                    type="error"
+                                    class="mb-5"
+                                >
+                                    {{ errorMessage }}
+                                </v-alert>
+
+                                <v-form
+                                    ref="form"
+                                    @submit.prevent
+                                    lazy-validation
+                                >
+                                    <v-text-field
+                                        v-model="firstName"
+                                        label="First Name"
+                                        :rules="namingRules"
+                                        color="light-blue-darken-4"
+                                    ></v-text-field>
+
+                                    <v-text-field
+                                        v-model="lastName"
+                                        label="Last Name"
+                                        :rules="namingRules"
+                                        color="light-blue-darken-4"
+                                    ></v-text-field>
+
+                                    <v-text-field
+                                        v-model="username"
+                                        label="Username"
+                                        :rules="namingRules"
+                                        color="light-blue-darken-4"
+                                    ></v-text-field>
+
+                                    <v-text-field
+                                        v-model="password"
+                                        label="Password"
+                                        type="password"
+                                        :rules="[
+                                            requiredRule,
+                                            (p) =>
+                                                p.length >= 8 ||
+                                                'Password should have at least 8 characters',
+                                        ]"
+                                        color="light-blue-darken-4"
+                                    ></v-text-field>
+                                    <v-text-field
+                                        v-model="passwordConfirm"
+                                        label="Confirm Password"
+                                        type="password"
+                                        :rules="[
+                                            requiredRule,
+                                            (p) =>
+                                                p === password ||
+                                                'Confirm password should match the password',
+                                        ]"
+                                        color="light-blue-darken-4"
+                                    ></v-text-field>
+                                </v-form>
+                            </v-card-text>
+                        </v-window-item>
+                    </v-window>
+
+                    <v-divider></v-divider>
+
+                    <v-card-actions>
+                        <v-btn v-if="step > 1" variant="text" @click="step--">
+                            Back
+                        </v-btn>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                            v-if="step < 3"
+                            color="primary"
+                            variant="flat"
+                            @click="
+                                if (step === 1) {
+                                    // initData();
+                                    step++;
+                                } else if (step === 2) validate();
+                            "
+                            :disabled="!roleRadios"
+                        >
+                            {{ step === 1 ? "Next" : "Signup" }}
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+                <p class="text-subtitle-1 mt-5 text-center">
+                    Already registered? go to
+                    <router-link to="login" class="text-decoration-none"
+                        >login</router-link
+                    >
+                    page
+                </p>
+            </v-col>
+        </v-row>
+    </v-container>
 </template>
-
-<style scoped>
-.container {
-    background-color: #eee;
-    color: #333;
-    padding: 2rem 4rem;
-    border-radius: 12px;
-    text-align: center;
-    width: 40%;
-    margin: auto;
-}
-
-.error {
-    background-color: rgba(230, 63, 63, 0.7);
-    color: #eee;
-    border-radius: 12px;
-    padding: 0.5rem;
-    margin-bottom: 1rem;
-}
-
-.inputs {
-    margin: 2.5rem auto 1.5rem;
-}
-
-.input-container {
-    text-align: center;
-}
-
-input {
-    border-radius: 100rem;
-    border: 1px solid #aaa;
-    padding: 1rem 2rem;
-    margin: 0.5rem 0;
-    width: 100%;
-    font-size: 1rem;
-}
-
-button {
-    border: none;
-    /* border-radius: 100rem; */
-    color: #eee;
-    width: 100%;
-    padding: 1rem 2rem;
-    background-color: rgb(20, 144, 185);
-    font-size: 1.2rem;
-    font-weight: 700;
-}
-
-button:hover {
-    cursor: pointer;
-    background-color: rgb(24, 119, 151);
-}
-
-.form-text {
-    margin-top: 0.5rem;
-}
-
-.form-link:link,
-.form-link:visited {
-    color: rgb(20, 144, 185);
-    text-decoration: none;
-}
-</style>

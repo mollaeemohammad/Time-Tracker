@@ -2,7 +2,7 @@ import axios from "axios";
 import { useRouter } from "vue-router";
 import { ref } from "vue";
 
-export function useLogin(userRole) {
+export function useLogin(userRoleRef) {
     const router = useRouter();
 
     const username = ref("");
@@ -19,7 +19,7 @@ export function useLogin(userRole) {
 
     async function getSubmitData() {
         console.log(username, password);
-        const response = await axios.post(`api/login_${userRole}`, {
+        const response = await axios.post(`api/login_${userRoleRef.value}`, {
             username: username.value,
             password: password.value,
         });

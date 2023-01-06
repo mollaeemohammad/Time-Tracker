@@ -8,7 +8,7 @@ import Nav from "./components/Nav.vue";
         <main>
             <section>
                 <!-- <AlertVue class="alert"></AlertVue> -->
-                <router-view></router-view>
+                <router-view />
             </section>
         </main>
     </div>
