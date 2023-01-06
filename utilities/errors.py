@@ -49,6 +49,10 @@ class AlreadyIsLoggedInError(HTTPException):
     pass
 
 
+class UnableToAddToDataBase(HTTPException):
+    pass
+
+
 errors = {
     "InternalServerError": {
         "message": "Something went wrong",
@@ -96,6 +100,10 @@ errors = {
     },
     "AlreadyIsLoggedInError": {
         "message": "When you are logged in, you cannot do it again.",
+        "status": 400
+    },
+    "UnableToAddToDataBase": {
+        "message": "Unable to add sent information to data base.",
         "status": 400
     }
 }

@@ -1,9 +1,9 @@
-from flask import jsonify, g, current_app, session
+from flask import jsonify, session
 from flask_restful import Resource, reqparse
 from utilities.login import login_employee, login_employer
 from utilities.errors import *
 from utilities.new_user import add_new_employee, add_new_employer
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 
 
 def is_found_user(mysql_response: list) -> bool:
@@ -168,6 +168,7 @@ class LoginEmployer(Resource):
 
 
 class Logout(Resource):
+    @jwt_required()
     def post(self):
         try:
             if not ('logged_in' in list(session.keys())) or not session['logged_in']:
@@ -176,7 +177,7 @@ class Logout(Resource):
             username = session['username']
             id = session['id']
 
-            print([role, username, id])
+            print(get_jwt_identity())
             session.clear()
 
             return jsonify({
