@@ -4,9 +4,9 @@ import Nav from "./components/Nav.vue";
 
 <template>
     <div id="app">
-        <Nav />
+        <!-- <Nav /> -->
         <main>
-            <section class="container">
+            <section>
                 <!-- <AlertVue class="alert"></AlertVue> -->
                 <router-view></router-view>
             </section>

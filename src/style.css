@@ -15,13 +15,13 @@
     -webkit-text-size-adjust: 100%;
 } */
 
-* {
+/* * {
     margin: 0;
     padding: 0;
     box-sizing: inherit;
-}
+} */
 
-body {
+/* body {
     margin: 0;
     min-width: 320px;
     min-height: 100vh;
@@ -29,7 +29,7 @@ body {
     color: #333;
     background-color: rgb(18, 162, 210);
     font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
-}
+} */
 
 /* a {
     font-weight: 500;
