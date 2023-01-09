@@ -79,7 +79,7 @@ errors = {
         "status": 400
     },
     "DeletingError": {
-        "message": "Deleting movie added by other is forbidden",
+        "message": "Deleting process has a problem.",
         "status": 403
     },
     "NotExistsError": {
