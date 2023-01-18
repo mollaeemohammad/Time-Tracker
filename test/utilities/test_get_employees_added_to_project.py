@@ -4,6 +4,7 @@ from utilities.add_new_project import add_new_project
 from utilities.new_user import add_new_employee
 from utilities.delete_employee import delete_employee
 from utilities.add_employee_to_project import add_employee_to_project
+from utilities.get_employees_added_to_project import get_employees_added_to_project
 from utilities.delete_project import delete_project
 
 
@@ -15,7 +16,7 @@ class TestGetEmployeesAddedToProject(TestCase):
         add_new_employee('test2', 'test2', 'test2', 'test2')
         self.assertNotEqual(add_employee_to_project('test', 'test'), -1)
         self.assertNotEqual(add_employee_to_project('test2', 'test'), -1)
+        self.assertEqual(len(get_employees_added_to_project("test")), 2)
         delete_project('test')
         delete_employee('test')
         delete_employee('test2')
-
