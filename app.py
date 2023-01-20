@@ -13,6 +13,7 @@ from apis.delete_employee import DeleteEmployee
 from apis.delete_employer import DeleteEmployer
 from apis.delete_employee_from_project import DeleteEmployeeFromProject
 from apis.delete_project import DeleteProject
+from apis.get_employees_added_to_project import GetEmployeesAddedToProject
 
 
 def init_routes(api: Api) -> None:
@@ -31,6 +32,8 @@ def init_routes(api: Api) -> None:
     api.add_resource(DeleteEmployer, '/api/delete_employer')
     api.add_resource(DeleteEmployeeFromProject, '/api/delete_employee_from_project')
     api.add_resource(DeleteProject, '/api/delete_project')
+    api.add_resource(GetEmployeesAddedToProject, '/api/get_employees_added_to_project')
+
     # api.add_resource(LoginAdmin, '/api/login_admin')
     # api.add_resource(LoginCustomer, '/api/login_customer')
     # api.add_resource(LoginStore, '/api/login_store')

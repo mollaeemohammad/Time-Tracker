@@ -3,7 +3,7 @@ from flask_restful import Resource, reqparse
 from utilities.delete_employee_from_project import delete_employee_from_project
 from utilities.errors import *
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from utilities.get_projects_of_employer import get_projects_of_employer
+from utilities.get_projects_of_employee import get_projects_of_employee
 
 
 def is_in_projects(project_name: str, projects: list) -> bool:
@@ -41,7 +41,7 @@ class DeleteEmployeeFromProject(Resource):
             employee_username = args['employee_username']
             employer_username = get_jwt_identity()
 
-            projects = get_projects_of_employer(employer_username=employer_username)
+            projects = get_projects_of_employee(employee_username=employer_username)
 
             if not is_in_projects(project_name=project_name, projects=projects):
                 raise DeletingError
