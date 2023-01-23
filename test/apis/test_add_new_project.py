@@ -1,6 +1,7 @@
 from unittest import TestCase
 from utilities.add_new_project import add_new_project
 from utilities.delete_project import delete_project
+from utilities.new_user import add_new_employer
 from app import create_app
 from flask_jwt_extended import create_access_token
 
@@ -12,7 +13,8 @@ class TestAddNewProjectAPI(TestCase):
         with app.app_context():
             client = app.test_client()
             delete_project('test')
-            access_token = create_access_token('mollaee22')
+            add_new_employer('test', 'test', 'test', 'test')
+            access_token = create_access_token('test')
             headers = {
                 'Authorization': 'Bearer {}'.format(access_token)
             }

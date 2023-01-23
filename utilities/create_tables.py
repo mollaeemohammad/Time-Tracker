@@ -45,7 +45,7 @@ def create_tables():
                                 employee_id      INT NOT NULL, \
                                 measured_hours   FLOAT NOT NULL, \
                                 date_time        DATE DEFAULT (CURRENT_DATE), \
-                                finished_date    TIMESTAMP, \
+                                finished_time    TIMESTAMP, \
                                 FOREIGN KEY (project_id) REFERENCES projects (id) \
                                     ON DELETE CASCADE \
                                     ON UPDATE CASCADE, \
