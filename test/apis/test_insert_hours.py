@@ -17,12 +17,12 @@ class TestInsertHours(TestCase):
             add_new_employer('test', 'test', 'test', 'employer')
             add_new_employee('test', 'test', 'test', 'employee')
             add_new_project_by_employer('employer', 'test', 'test')
-            access_token = create_access_token('employer')
+            access_token = create_access_token('employee')
             headers = {
                 'Authorization': 'Bearer {}'.format(access_token)
             }
             result = client.post('http://127.0.0.1:5000/api/insert_hours',
-                                 json={"employee_username": "employee", "project_name": "test", "measured_hours": 10.0},
+                                 json={"project_name": "test", "measured_hours": 10.0},
                                  headers=headers)
 
             self.assertEqual(result.status_code, 200)
