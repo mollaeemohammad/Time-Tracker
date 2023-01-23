@@ -17,6 +17,9 @@ from apis.get_employees_added_to_project import GetEmployeesAddedToProject
 from apis.get_employee import GetEmployee
 from apis.get_employer import GetEmployer
 from apis.get_project import GetProject
+from apis.get_projects_of_employee import GetProjectsOfEmployee
+from apis.get_projects_of_employer import GetProjectsOfEmployer
+from apis.update_project_status import UpdateProjectStatus
 
 
 def init_routes(api: Api) -> None:
@@ -39,6 +42,9 @@ def init_routes(api: Api) -> None:
     api.add_resource(GetEmployee, '/api/get_employee')
     api.add_resource(GetEmployer, '/api/get_employer')
     api.add_resource(GetProject, '/api/get_project')
+    api.add_resource(GetProjectsOfEmployee, '/api/get_projects_of_employee')
+    api.add_resource(GetProjectsOfEmployer, '/api/get_projects_of_employer')
+    api.add_resource(UpdateProjectStatus, '/api/update_project_status')
 
     # api.add_resource(LoginAdmin, '/api/login_admin')
     # api.add_resource(LoginCustomer, '/api/login_customer')

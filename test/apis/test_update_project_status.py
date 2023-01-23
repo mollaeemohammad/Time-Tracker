@@ -1,33 +1,30 @@
 from unittest import TestCase
-from utilities.delete_project import delete_project
-from utilities.new_user import add_new_employer
-from utilities.get_project import get_project
-from utilities.add_new_project import add_new_project
-from utilities.add_employee_to_project import add_employee_to_project
+from flask_jwt_extended import create_access_token
+from app import create_app
 from utilities.add_new_project_by_employer import add_new_project_by_employer
 from utilities.delete_employer import delete_employer
-from app import create_app
-from flask_jwt_extended import create_access_token
+from utilities.delete_project import delete_project
+from utilities.get_project import get_project
+from utilities.new_user import add_new_employer
 
 
-class TestDeleteProject(TestCase):
+class TestUpdateProjectStatus(TestCase):
     def test_delete(self):
-        """Delete a project without any error or problem by API"""
+        """Update status of a project without any error or problem by API"""
         app = create_app()
         with app.app_context():
             client = app.test_client()
             add_new_employer('test', 'test', 'test', 'test')
             add_new_project_by_employer('test', 'test', 'test')
-
             access_token = create_access_token('test')
             headers = {
                 'Authorization': 'Bearer {}'.format(access_token)
             }
-            result = client.post('http://127.0.0.1:5000/api/delete_project',
-                                 json={"project_name": "test"},
+            result = client.post('http://127.0.0.1:5000/api/update_project_status',
+                                 json={"project_name": "test", "new_status": "new test"},
                                  headers=headers)
 
             self.assertEqual(result.status_code, 200)
-            self.assertIsNone(get_project('test'))
-            delete_project("test")
+            self.assertEqual(get_project('test')[5], 'new test')
             delete_employer('test')
+            delete_project("test")

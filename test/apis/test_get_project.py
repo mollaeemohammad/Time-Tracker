@@ -21,9 +21,9 @@ class TestGetProject(TestCase):
             headers = {
                 'Authorization': 'Bearer {}'.format(access_token)
             }
-            result = client.get('http://127.0.0.1:5000/api/get_employer',
-                                 json={"project_name": "test"},
-                                 headers=headers)
+            result = client.get('http://127.0.0.1:5000/api/get_project',
+                                json={"project_name": "test"},
+                                headers=headers)
 
             self.assertEqual(result.status_code, 200)
             self.assertIsNotNone(result.json)

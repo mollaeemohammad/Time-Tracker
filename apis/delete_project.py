@@ -22,10 +22,10 @@ class DeleteProject(Resource):
             args = parser.parse_args()
 
             project_name = args['project_name']
-            # employer_username = get_jwt_identity()
-            #
-            # if employer_has_this_project(employer_username, project_name) is False:
-            #     raise NotAllowedToDoThis
+            employer_username = get_jwt_identity()
+
+            if employer_has_this_project(employer_username, project_name) is False:
+                raise NotAllowedToDoThis
 
             result_of_deletion = delete_project(name=project_name)
 
