@@ -30,3 +30,4 @@ class TestInsertHours(TestCase):
             delete_project('test')
             delete_employer('employer')
             delete_employee('employee')
+            delete_project('test')
