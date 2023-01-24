@@ -1,3 +1,4 @@
+from datetime import timedelta
 from flask import Flask, g, current_app
 from flask_restful import Api
 # from flask_rbac import RBAC, RoleMixin, UserMixin
@@ -21,6 +22,8 @@ from apis.get_projects_of_employee import GetProjectsOfEmployee
 from apis.get_projects_of_employer import GetProjectsOfEmployer
 from apis.update_project_status import UpdateProjectStatus
 from apis.insert_hours import InsertHours
+from apis.get_hours_of_employee import GetHoursOfEmployee
+from apis.get_hours_of_all_employees import GetHoursOfAllEmployees
 
 
 def init_routes(api: Api) -> None:
@@ -47,6 +50,8 @@ def init_routes(api: Api) -> None:
     api.add_resource(GetProjectsOfEmployer, '/api/get_projects_of_employer')
     api.add_resource(UpdateProjectStatus, '/api/update_project_status')
     api.add_resource(InsertHours, '/api/insert_hours')
+    api.add_resource(GetHoursOfEmployee, '/api/get_hours_of_employee')
+    api.add_resource(GetHoursOfAllEmployees, '/api/get_hours_of_all_employees')
 
     # api.add_resource(LoginAdmin, '/api/login_admin')
     # api.add_resource(LoginCustomer, '/api/login_customer')
@@ -86,10 +91,11 @@ def create_app() -> Flask:
     # SqlAlchemy Database Configuration With Mysql
     # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:asd147''@localhost/time_tracker'
     # app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    CORS(app)
+    CORS(app, supports_credentials=True, resources={r"/*": {"origins": "*"}})
     app.secret_key = 'asdsdfsdfs13sdf_df%&'
 
     # setting up the jwt extension
+    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(weeks=100)
     app.config["JWT_SECRET_KEY"] = "super-secret"  # Change this!
     jwt = JWTManager(app)
 
@@ -103,6 +109,11 @@ def create_app() -> Flask:
     # rbac.init_app(app)
 
     app.config['RBAC_USE_WHITE'] = True
+    # app.config.update(
+    #     SESSION_COOKIE_SECURE='True',
+    #     SESSION_COOKIE_HTTPONLY=True,
+    #     SESSION_COOKIE_SAMESITE='None'
+    # )
 
     create_tables()
 
