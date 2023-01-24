@@ -24,6 +24,8 @@ from apis.update_project_status import UpdateProjectStatus
 from apis.insert_hours import InsertHours
 from apis.get_hours_of_employee import GetHoursOfEmployee
 from apis.get_hours_of_all_employees import GetHoursOfAllEmployees
+from apis.get_total_hours_of_employee import GetTotalHoursOfEmployee
+from apis.update_fee import UpdateFee
 
 
 def init_routes(api: Api) -> None:
@@ -52,6 +54,8 @@ def init_routes(api: Api) -> None:
     api.add_resource(InsertHours, '/api/insert_hours')
     api.add_resource(GetHoursOfEmployee, '/api/get_hours_of_employee')
     api.add_resource(GetHoursOfAllEmployees, '/api/get_hours_of_all_employees')
+    api.add_resource(GetTotalHoursOfEmployee, '/api/get_total_hours_of_employee')
+    api.add_resource(UpdateFee, '/api/update_fee')
 
     # api.add_resource(LoginAdmin, '/api/login_admin')
     # api.add_resource(LoginCustomer, '/api/login_customer')

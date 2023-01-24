@@ -3,9 +3,23 @@ from flask_jwt_extended import jwt_required
 from flask_restful import Resource, reqparse
 from utilities.errors import *
 from utilities.get_hours_of_employee import get_hours_of_employee
+from utilities.get_fee import get_fee
 
 
-class GetHoursOfEmployee(Resource):
+def calculate_hours(hours: list) -> float:
+    """
+    Except of summing the hours in bellow API, I do it in here
+    :param hours: A list of tuples with schema in hours table
+    :return:
+    """
+    hours_amount = 0.0
+    for hour in hours:
+        hours_amount += hour[2]
+
+    return hours_amount
+
+
+class GetTotalHoursOfEmployee(Resource):
     @jwt_required()
     def get(self):
         try:
@@ -25,7 +39,12 @@ class GetHoursOfEmployee(Resource):
             employee_username = args['employee_username']
             project_name = args['project_name']
 
-            return jsonify(get_hours_of_employee(employee_username=employee_username, project_name=project_name))
+            hours = get_hours_of_employee(employee_username=employee_username, project_name=project_name)
+            fee = get_fee(employee_username=employee_username, project_name=project_name)
+            return jsonify({
+                'total_hours': calculate_hours(hours=hours),
+                'fee': fee
+            })
 
         except NotAllowedToDoThis:
             return jsonify(errors['NotAllowedToDoThis'])

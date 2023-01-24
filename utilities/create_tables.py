@@ -59,6 +59,7 @@ def create_tables():
                             ( \
                                 project_id       INT NOT NULL, \
                                 employee_id      INT NOT NULL, \
+                                fee              FLOAT, \
                                 FOREIGN KEY (project_id) REFERENCES projects (id) \
                                     ON DELETE CASCADE \
                                     ON UPDATE CASCADE, \

@@ -1,11 +1,10 @@
 from flask import jsonify
+from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource, reqparse
-from utilities.errors import *
-from utilities.get_employer import get_employer
-from utilities.get_hours_of_all_employees import get_hours_of_all_employees
 from apis.update_description import employer_has_this_project
-from flask_jwt_extended import get_jwt_identity
+from utilities.errors import *
+from utilities.get_hours_of_all_employees import get_hours_of_all_employees
 
 
 class GetHoursOfAllEmployees(Resource):
@@ -31,5 +30,5 @@ class GetHoursOfAllEmployees(Resource):
 
             return jsonify(get_hours_of_all_employees(project_name=project_name))
 
-        except:
+        except NotAllowedToDoThis:
             return jsonify(errors['NotAllowedToDoThis'])
