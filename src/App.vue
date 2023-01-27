@@ -1,27 +1,16 @@
-<script setup>
-import Nav from "./components/Nav.vue";
-</script>
+<script setup></script>
 
 <template>
     <div id="app">
-        <!-- <Nav /> -->
         <main>
             <section>
-                <!-- <AlertVue class="alert"></AlertVue> -->
-                <router-view />
+                <router-view style="background-color: #0f2c33; color: #eee" />
             </section>
         </main>
     </div>
 </template>
 
 <style>
-/* body {
-    box-sizing: border-box;
-    background-color: rgb(18, 162, 210);
-    color: #333;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-} */
-
 .container {
     padding: 4rem 8rem;
 }
