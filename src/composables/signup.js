@@ -40,7 +40,7 @@ export function useSignup(userRoleRef) {
         console.log(response);
 
         if (response.data.message === "Successful") {
-            router.push(`/${userRoleRef.value}/login`);
+            router.push(`/login`);
         }
 
         if (response.data.status >= 400) {

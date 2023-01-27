@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useRouter } from "vue-router";
 import { ref } from "vue";
+import { useUserStore } from "../stores/user";
 
 export function useLogin(userRoleRef) {
     const router = useRouter();
@@ -25,7 +26,15 @@ export function useLogin(userRoleRef) {
         });
 
         console.log(response);
-        if (response.data.message === "Successful") {
+        if (
+            response.data.message === "Successful" ||
+            response.data.access_token
+        ) {
+            const accessToken = response.data.access_token;
+            localStorage.setItem("access_token", accessToken);
+            localStorage.setItem("user_role", userRoleRef.value);
+            const store = useUserStore();
+            store.role = userRoleRef.value;
             router.push("/");
         } else if (
             response.data.message === "Unsuccessful" ||
