@@ -1,5 +1,13 @@
 <script setup>
-import { ref } from "vue";
+import axios from "axios";
+import { ref, onMounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { useInitData } from "../composables/initData";
+import { useUserStore } from "../stores/user";
+
+const store = useUserStore();
+const router = useRouter();
+const route = useRoute();
 
 const form = ref(null);
 const empForm = ref(null);
@@ -19,6 +27,8 @@ const employeeRepeatError = ref(false);
 const formErrorState = ref(false);
 const formErrorMessage = ref("");
 
+const isEditing = ref(false);
+
 function showEmployeeError() {
     employeeRepeatError.value = true;
     setTimeout(() => {
@@ -36,6 +46,98 @@ function showFormError(errorMessage) {
     }, 3000);
 }
 
+async function removeProject() {
+    const response = await axios.post(
+        "api/delete_project",
+        {
+            project_name: projectName.value,
+        },
+        { headers: { Authorization: `Bearer ${store.token}` } }
+    );
+    console.log(response);
+
+    if (!(response.data.status < 400 || response.data.message === "Successful"))
+        return false;
+    return true;
+}
+
+async function updateInitProjectStatus(token) {
+    const response = await axios.post(
+        `api/update_project_status`,
+        {
+            project_name: projectName.value,
+            new_status: "Unfinished",
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+    );
+    if (response.data.status < 400 || response.data.message === "Successful") {
+        return true;
+    }
+    return false;
+}
+
+async function addEmployee(token, employeeUsername) {
+    const response = await axios.post(
+        `api/add_employee_to_project`,
+        {
+            project_name: projectName.value,
+            employee_username: employeeUsername,
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+    );
+    console.log(response);
+    if (response.data.status < 400 || response.data.message === "Successful") {
+        return true;
+    }
+    return false;
+}
+
+async function addNewProject(token) {
+    let isEmployeeAdded;
+
+    console.log(projectName.value, description.value, token);
+    const response = await axios.post(
+        `api/add_new_project`,
+        {
+            project_name: projectName.value,
+            description: description.value,
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+    );
+    console.log(response);
+
+    if (
+        !(response.data.status < 400 || response.data.message === "Successful")
+    ) {
+        showFormError(
+            "Something went wrong. Possibly project with this name does exist!"
+        );
+        return;
+    }
+
+    const isStatusUpdated = await updateInitProjectStatus(token);
+    if (!isStatusUpdated) {
+        showFormError("Something went wrong.");
+        await removeProject();
+        return;
+    }
+
+    store.currentProject.name = projectName.value;
+    store.currentProject.status = "Unfinished";
+
+    for (const empData of employeeList.value) {
+        isEmployeeAdded = await addEmployee(token, empData.username);
+        console.log("this " + isEmployeeAdded);
+        if (!isEmployeeAdded) {
+            showFormError("Could not add employee " + empData.username);
+            await removeProject();
+            return;
+        }
+    }
+
+    router.push({ name: "homeEmployer" });
+}
+
 async function validate() {
     const { valid } = await form.value.validate();
     if (!valid) return;
@@ -43,6 +145,7 @@ async function validate() {
         showFormError("Project should have at least one employee.");
         return;
     }
+    addNewProject(store.token);
 }
 
 async function AddValidEmp() {
@@ -68,20 +171,23 @@ function removeEmployee(empData) {
     const empIndex = employeeList.value.findIndex(
         (emp) => emp.username === empData.username
     );
-
-    employeeList.value.pop(empIndex);
+    employeeList.value.splice(empIndex, 1);
 }
+
+onMounted(() => {
+    useInitData();
+});
 </script>
 
 <template>
-    <v-app class="bg-light-blue-lighten-5">
+    <v-app>
         <v-app-bar>
             <template v-slot:prepend>
                 <v-btn
                     icon="mdi-chevron-left"
                     size="large"
                     class="text-h6"
-                    to="home"
+                    @click="router.push({ name: 'homeEmployer' })"
                 ></v-btn>
             </template>
 
@@ -116,6 +222,7 @@ function removeEmployee(empData) {
                         auto-grow
                         v-model="description"
                         variant="filled"
+                        :rules="namingRules"
                         color="light-blue-darken-4"
                         label="Description"
                     ></v-textarea>

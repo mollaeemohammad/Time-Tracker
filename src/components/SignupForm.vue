@@ -164,7 +164,10 @@ async function validate() {
                 </v-card>
                 <p class="text-subtitle-1 mt-5 text-center">
                     Already registered? go to
-                    <router-link to="login" class="text-decoration-none"
+                    <router-link
+                        to="login"
+                        class="text-decoration-none"
+                        style="color: #91cfde"
                         >login</router-link
                     >
                     page
